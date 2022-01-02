@@ -3,14 +3,33 @@ const express = require('express');
 const app = express();
 // native package to make https requests (allows access to a server)
 const https = require("https");
+const bodyParser = require('body-parser')
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
 
 app.get("/", function(req,res) {
 
-    // URL of API 
-    const requestUrl = "https://api.openweathermap.org/data/2.5/weather?q=Nobleton,Ontario&appid=1f07abc0605750db339a60e9da6fd0e0&units=metric" 
+  res.sendFile(__dirname + "/index.html")
+    
+})
+
+app.post("/", function(req,res) {
+  
+
+      // Breakdown API URL of API 
+  
+    const query = req.body.cityName
+    const appId = "1f07abc0605750db339a60e9da6fd0e0"
+    const units = "metric"
+    const requestUrl = "https://api.openweathermap.org/data/2.5/weather?q="+query+"&appid="+appId+"&units="+units
+
+    console.log(requestUrl)
+
+
     // Secure get request and the raw , unformatted JSON is returned back 
     https.get(requestUrl, function(apiResponse) {
         // console.log(apiResponse.statusCode)
@@ -44,8 +63,6 @@ app.get("/", function(req,res) {
     app.get('/image', function (req, res) {
      res.sendFile(imageUrl);
 });
-
-    
 })
 
 
